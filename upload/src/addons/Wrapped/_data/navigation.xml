@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation>
+  <navigation_type type_id="public">
+    <navigation navigation_id="wrapped" parent_navigation_id="" display_order="70" icon="fa-calendar-star" visible="1">
+      <expression><![CDATA[$xf.visitor.user_id]]></expression>
+      <action_config><![CDATA[{"href_type":"custom","href_value":"wrapped"}]]></action_config>
+    </navigation>
+    <navigation navigation_id="forum_wrapped" parent_navigation_id="" display_order="71" icon="fa-users" visible="1">
+      <expression><![CDATA[true]]></expression>
+      <action_config><![CDATA[{"href_type":"custom","href_value":"forum-wrapped"}]]></action_config>
+    </navigation>
+  </navigation_type>
+</navigation>

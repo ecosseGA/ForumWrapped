@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<routes>
+  <route route_type="public" route_prefix="wrapped" controller="IdleChatter\Wrapped:Wrapped" context="wrapped"/>
+  <route route_type="public" route_prefix="wrapped" sub_name="view" format="view/:action" controller="IdleChatter\Wrapped:Wrapped" context="wrapped"/>
+  <route route_type="public" route_prefix="forum-wrapped" controller="IdleChatter\Wrapped:ForumWrapped" context="wrapped"/>
+</routes>

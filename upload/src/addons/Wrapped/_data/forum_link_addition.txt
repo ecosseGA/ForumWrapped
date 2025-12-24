@@ -1,0 +1,15 @@
+
+    <!-- Navigation to Forum Wrapped -->
+    <div class="wrapped-section wrapped-section--dark">
+        <div class="wrapped-nav-callout">
+            <div class="wrapped-nav-icon">🌐</div>
+            <div class="wrapped-nav-text">
+                <div class="wrapped-nav-title">Want to see the FORUM's stats?</div>
+                <div class="wrapped-nav-subtitle">Discover the community's {$year} highlights, top contributors, and trends</div>
+            </div>
+            <a href="{{ link('forum-wrapped', null, {'year': $year}) }}" class="button button--cta button--icon button--icon--download">
+                <span class="button-text">View Forum's {$year} Wrapped</span>
+            </a>
+        </div>
+    </div>
+

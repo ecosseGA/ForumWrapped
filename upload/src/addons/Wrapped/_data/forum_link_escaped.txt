@@ -1,0 +1,15 @@
+
+    &lt;!-- Navigation to Forum Wrapped --&gt;
+    &lt;div class="wrapped-section wrapped-section--dark"&gt;
+        &lt;div class="wrapped-nav-callout"&gt;
+            &lt;div class="wrapped-nav-icon"&gt;🌐&lt;/div&gt;
+            &lt;div class="wrapped-nav-text"&gt;
+                &lt;div class="wrapped-nav-title"&gt;Want to see the FORUM's stats?&lt;/div&gt;
+                &lt;div class="wrapped-nav-subtitle"&gt;Discover the community's {$year} highlights, top contributors, and trends&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;a href="{{ link('forum-wrapped', null, {'year': $year}) }}" class="button button--cta button--icon button--icon--download"&gt;
+                &lt;span class="button-text"&gt;View Forum's {$year} Wrapped&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+

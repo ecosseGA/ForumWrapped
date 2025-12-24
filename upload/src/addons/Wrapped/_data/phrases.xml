@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<phrases>
+  
+  <phrase title="wrapped_invalid_year" version_id="1000000" version_string="1.0.0">Invalid year specified. Must be between 2020 and current year.</phrase>
+  <phrase title="wrapped_can_only_view_own" version_id="1000000" version_string="1.0.0">You can only view your own Wrapped.</phrase>
+  <phrase title="wrapped_no_activity_year" version_id="1000000" version_string="1.0.0">You had no forum activity in {year}. Start posting to see your Wrapped!</phrase>
+  
+  
+  <phrase title="wrapped_your_year_in_review" version_id="1000000" version_string="1.0.0">Your Year in Review</phrase>
+  <phrase title="wrapped_loading" version_id="1000000" version_string="1.0.0">Loading Your Wrapped...</phrase>
+  
+  
+  <phrase title="wrapped_your_volume" version_id="1000000" version_string="1.0.0">Your Volume</phrase>
+  <phrase title="wrapped_when_you_post" version_id="1000000" version_string="1.0.0">When You Post</phrase>
+  <phrase title="wrapped_your_hangouts" version_id="1000000" version_string="1.0.0">Your Hangouts</phrase>
+  <phrase title="wrapped_top_threads" version_id="1000000" version_string="1.0.0">Top Threads</phrase>
+  <phrase title="wrapped_your_teammates" version_id="1000000" version_string="1.0.0">Your Teammates</phrase>
+  <phrase title="wrapped_reactions_vibe" version_id="1000000" version_string="1.0.0">Reactions &amp; Vibe</phrase>
+  <phrase title="wrapped_your_style" version_id="1000000" version_string="1.0.0">Your Style</phrase>
+  <phrase title="wrapped_your_words" version_id="1000000" version_string="1.0.0">Your Words</phrase>
+  <phrase title="wrapped_bookends" version_id="1000000" version_string="1.0.0">Bookends</phrase>
+  <phrase title="wrapped_year_over_year" version_id="1000000" version_string="1.0.0">Year Over Year</phrase>
+  
+  
+  <phrase title="wrapped_hangouts_subtitle" version_id="1000000" version_string="1.0.0">Where you spend most of your time</phrase>
+  <phrase title="wrapped_threads_subtitle" version_id="1000000" version_string="1.0.0">The conversations you couldn't resist</phrase>
+  <phrase title="wrapped_teammates_subtitle" version_id="1000000" version_string="1.0.0">Members you shared the most threads with</phrase>
+  <phrase title="wrapped_style_subtitle" version_id="1000000" version_string="1.0.0">How you contribute</phrase>
+  <phrase title="wrapped_words_subtitle" version_id="1000000" version_string="1.0.0">Your most notable post</phrase>
+  <phrase title="wrapped_rank_subtitle" version_id="1000000" version_string="1.0.0">Out of all active members</phrase>
+  <phrase title="wrapped_bookends_subtitle" version_id="1000000" version_string="1.0.0">Where it all began and ended in {year}</phrase>
+  <phrase title="wrapped_yoy_subtitle" version_id="1000000" version_string="1.0.0">How {year} compared to {prevYear}</phrase>
+  <phrase title="wrapped_monthly_activity" version_id="1000000" version_string="1.0.0">Your posting activity throughout {year}</phrase>
+  <phrase title="wrapped_weekday_activity" version_id="1000000" version_string="1.0.0">Which days you prefer</phrase>
+  <phrase title="wrapped_hourly_pattern" version_id="1000000" version_string="1.0.0">Your posting pattern</phrase>
+  
+  
+  <phrase title="wrapped_posts_label" version_id="1000000" version_string="1.0.0">Posts</phrase>
+  <phrase title="wrapped_reactions_received" version_id="1000000" version_string="1.0.0">Reactions Received</phrase>
+  <phrase title="wrapped_community_rank" version_id="1000000" version_string="1.0.0">Community Rank</phrase>
+  <phrase title="wrapped_peak_hours" version_id="1000000" version_string="1.0.0">Peak Hours</phrase>
+  <phrase title="wrapped_longest_post" version_id="1000000" version_string="1.0.0">Longest Post</phrase>
+  <phrase title="wrapped_year_in_posts" version_id="1000000" version_string="1.0.0">Your Year in Posts</phrase>
+  
+  
+  <phrase title="wrapped_view_post" version_id="1000000" version_string="1.0.0">View Post</phrase>
+  <phrase title="wrapped_view_current_year" version_id="1000000" version_string="1.0.0">View {year} Wrapped</phrase>
+  
+  
+  <phrase title="wrapped_thank_you" version_id="1000000" version_string="1.0.0">Thank You, {name}!</phrase>
+  <phrase title="wrapped_see_you_next_year" version_id="1000000" version_string="1.0.0">See you in {year}!</phrase>
+  
+  
+  <phrase title="wrapped_posts_count" version_id="1000000" version_string="1.0.0">{count} posts</phrase>
+  <phrase title="wrapped_shared_threads" version_id="1000000" version_string="1.0.0">{count} shared threads</phrase>
+<phrase title="wrapped_top_forums" version_id="1020000" version_string="1.2.0">&lt;![CDATA[Your Top Forums]]&gt;</phrase><phrase title="wrapped_where_you_posted_most" version_id="1020000" version_string="1.2.0">&lt;![CDATA[Where you posted the most]]&gt;</phrase><phrase title="wrapped_threads_you_contributed_most" version_id="1020000" version_string="1.2.0">&lt;![CDATA[Threads you contributed to the most]]&gt;</phrase><phrase title="wrapped_teammates" version_id="1020000" version_string="1.2.0">&lt;![CDATA[Your Teammates]]&gt;</phrase><phrase title="wrapped_members_you_posted_with_most" version_id="1020000" version_string="1.2.0">&lt;![CDATA[Members you shared threads with]]&gt;</phrase><phrase title="wrapped_biggest_fans" version_id="1020000" version_string="1.2.0">&lt;![CDATA[Your Biggest Fans]]&gt;</phrase><phrase title="wrapped_who_reacted_most" version_id="1020000" version_string="1.2.0">&lt;![CDATA[Members who reacted to your posts the most]]&gt;</phrase><phrase title="wrapped_you_reacted_to" version_id="1020000" version_string="1.2.0">&lt;![CDATA[Who You Reacted To]]&gt;</phrase><phrase title="wrapped_members_you_appreciated_most" version_id="1020000" version_string="1.2.0">&lt;![CDATA[Members you appreciated the most]]&gt;</phrase><phrase title="wrapped_first_and_last_posts" version_id="1020000" version_string="1.2.0">&lt;![CDATA[Your First &amp; Last Posts]]&gt;</phrase><phrase title="wrapped_first_post" version_id="1020000" version_string="1.2.0">&lt;![CDATA[First Post]]&gt;</phrase><phrase title="wrapped_last_post" version_id="1020000" version_string="1.2.0">&lt;![CDATA[Last Post]]&gt;</phrase><phrase title="wrapped_view_prev_year" version_id="1020000" version_string="1.2.0">&lt;![CDATA[View {year}]]&gt;</phrase><phrase title="wrapped_no_forum_activity_year" version_id="1020000" version_string="1.2.0">No forum activity found for {year}.</phrase></phrases>

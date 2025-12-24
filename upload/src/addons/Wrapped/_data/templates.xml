@@ -1,0 +1,2392 @@
+<?xml version='1.0' encoding='utf-8'?>
+<templates>
+  <template type="public" title="wrapped_view" version_id="1020000" version_string="1.2.0">&lt;xf:title&gt;{{phrase('wrapped_your_year_in_review')}}&lt;/xf:title&gt;
+
+&lt;xf:css src="wrapped.less" /&gt;
+
+&lt;div class="wrapped-container"&gt;
+    &lt;div class="wrapped-hero"&gt;
+        &lt;div class="wrapped-hero-content"&gt;
+            &lt;xf:avatar user="{$user}" size="l" class="wrapped-hero-avatar" /&gt;
+            &lt;h1 class="wrapped-hero-title"&gt;{$user.username}'s {$year} Wrapped&lt;/h1&gt;
+            &lt;p class="wrapped-hero-subtitle"&gt;A year in review of your forum activity&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Total Posts --&gt;
+    &lt;div class="wrapped-section"&gt;
+        &lt;div class="wrapped-stat-hero"&gt;
+            &lt;div class="wrapped-stat-number"&gt;{$stats.totals.posts|number}&lt;/div&gt;
+            &lt;div class="wrapped-stat-label"&gt;{{phrase('wrapped_posts_label')}}&lt;/div&gt;
+            &lt;xf:if is="$stats.yearOverYear.prevPosts &gt; 0"&gt;
+                &lt;div class="wrapped-stat-change"&gt;
+                    &lt;xf:if is="$postChange &gt; 0"&gt;
+                        &lt;span class="wrapped-stat-up"&gt;+{$postChange|number}&lt;/span&gt;
+                    &lt;xf:elseif is="$postChange &lt; 0" /&gt;
+                        &lt;span class="wrapped-stat-down"&gt;{$postChange|number}&lt;/span&gt;
+                    &lt;/xf:if&gt;
+                    vs {$prevYear}
+                &lt;/div&gt;
+            &lt;/xf:if&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Your Volume --&gt;
+    &lt;div class="wrapped-section"&gt;
+        &lt;h2 class="wrapped-section-title"&gt;{{phrase('wrapped_your_volume')}}&lt;/h2&gt;
+        &lt;div class="wrapped-stats-grid"&gt;
+            &lt;div class="wrapped-stat-card"&gt;
+                &lt;div class="wrapped-stat-value"&gt;{$stats.totals.posts|number}&lt;/div&gt;
+                &lt;div class="wrapped-stat-name"&gt;{{phrase('wrapped_posts_label')}}&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="wrapped-stat-card"&gt;
+                &lt;div class="wrapped-stat-value"&gt;{$stats.totals.threads|number}&lt;/div&gt;
+                &lt;div class="wrapped-stat-name"&gt;Threads Started&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="wrapped-stat-card"&gt;
+                &lt;div class="wrapped-stat-value"&gt;{$stats.totals.reactionsReceived|number}&lt;/div&gt;
+                &lt;div class="wrapped-stat-name"&gt;{{phrase('wrapped_reactions_received')}}&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;xf:if is="$stats.rank.percentile &gt; 0"&gt;
+            &lt;div class="wrapped-highlight"&gt;
+                You posted more than &lt;strong&gt;{$stats.rank.percentile}%&lt;/strong&gt; of all forum members
+            &lt;/div&gt;
+        &lt;/xf:if&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Most Active Month (NEW) --&gt;
+    &lt;xf:if is="$stats.monthly.peakCount &gt; 0"&gt;
+        &lt;div class="wrapped-section wrapped-section--highlight"&gt;
+            &lt;div class="wrapped-icon"&gt;📅&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title wrapped-section-title--accent"&gt;Your Busiest Month&lt;/h2&gt;
+            &lt;div class="wrapped-peak-month"&gt;
+                &lt;div class="wrapped-peak-month-name"&gt;{$stats.monthly.peakMonth}&lt;/div&gt;
+                &lt;div class="wrapped-peak-month-count"&gt;{$stats.monthly.peakCount} posts&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Monthly Activity Chart --&gt;
+    &lt;div class="wrapped-section"&gt;
+        &lt;h2 class="wrapped-section-title"&gt;{{phrase('wrapped_year_in_posts')}}&lt;/h2&gt;
+        &lt;p class="wrapped-section-subtitle"&gt;{{phrase('wrapped_monthly_activity', {'year': $year})}}&lt;/p&gt;
+        &lt;div class="wrapped-chart"&gt;
+            &lt;div class="wrapped-chart-bars"&gt;
+                &lt;xf:foreach loop="$stats.monthly.chartData" value="$item"&gt;
+                    &lt;div class="wrapped-chart-bar-container"&gt;
+                        &lt;div class="wrapped-chart-bar &lt;xf:if is="$item.isPeak"&gt;wrapped-chart-bar--peak&lt;/xf:if&gt;" 
+                             style="height: {$item.height}%;" 
+                             data-value="{$item.count}"&gt;&lt;/div&gt;
+                        &lt;div class="wrapped-chart-label"&gt;{$item.name}&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Peak Hours (ENHANCED) --&gt;
+    &lt;xf:if is="$stats.hourly.peakHour !== null"&gt;
+        &lt;div class="wrapped-section wrapped-section--dark"&gt;
+            &lt;div class="wrapped-icon"&gt;🕐&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title wrapped-section-title--accent"&gt;Your Peak Hours&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;24-hour posting activity pattern&lt;/p&gt;
+            
+            &lt;div class="wrapped-chart wrapped-chart--hourly"&gt;
+                &lt;div class="wrapped-chart-bars wrapped-chart-bars--hours"&gt;
+                    &lt;xf:foreach loop="$stats.hourly.chartData" value="$item"&gt;
+                        &lt;div class="wrapped-chart-bar-container wrapped-chart-bar-container--hour"&gt;
+                            &lt;div class="wrapped-chart-bar wrapped-chart-bar--hourly &lt;xf:if is="$item.isPeak"&gt;wrapped-chart-bar--peak&lt;/xf:if&gt;" 
+                                 style="height: {$item.height}%;"
+                                 title="{$item.displayHour}: {$item.count} posts"
+                                 data-xf-init="tooltip"&gt;&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/xf:foreach&gt;
+                &lt;/div&gt;
+                &lt;div class="wrapped-chart-hours-labels"&gt;
+                    &lt;span&gt;12am&lt;/span&gt;
+                    &lt;span&gt;6am&lt;/span&gt;
+                    &lt;span&gt;12pm&lt;/span&gt;
+                    &lt;span&gt;6pm&lt;/span&gt;
+                    &lt;span&gt;11pm&lt;/span&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="wrapped-badge"&gt;
+                &lt;div class="wrapped-badge-icon"&gt;⏰&lt;/div&gt;
+                &lt;div class="wrapped-badge-text"&gt;
+                    You're a &lt;strong&gt;{$stats.hourly.timePeriod}&lt;/strong&gt;! Most active around {$stats.hourly.peakTimeRange}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Weekend vs Weekday (NEW) --&gt;
+    &lt;div class="wrapped-section wrapped-section--dark"&gt;
+        &lt;div class="wrapped-icon"&gt;⚖️&lt;/div&gt;
+        &lt;h2 class="wrapped-section-title wrapped-section-title--accent"&gt;Weekend vs Weekday&lt;/h2&gt;
+        &lt;p class="wrapped-section-subtitle"&gt;When do you prefer to engage?&lt;/p&gt;
+        
+        &lt;div class="wrapped-vs-comparison"&gt;
+            &lt;div class="wrapped-vs-circle wrapped-vs-circle--weekday"&gt;
+                &lt;div class="wrapped-vs-number"&gt;{$stats.weekendVsWeekday.weekdayTotal|number}&lt;/div&gt;
+                &lt;div class="wrapped-vs-label"&gt;posts&lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="wrapped-vs-vs"&gt;VS&lt;/div&gt;
+            
+            &lt;div class="wrapped-vs-circle wrapped-vs-circle--weekend"&gt;
+                &lt;div class="wrapped-vs-number"&gt;{$stats.weekendVsWeekday.weekendTotal|number}&lt;/div&gt;
+                &lt;div class="wrapped-vs-label"&gt;posts&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="wrapped-vs-details"&gt;
+            &lt;div class="wrapped-vs-detail"&gt;
+                &lt;span class="wrapped-vs-detail-label wrapped-vs-detail-label--weekday"&gt;Weekdays&lt;/span&gt;
+                &lt;span class="wrapped-vs-detail-info"&gt;Mon - Fri&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="wrapped-vs-detail"&gt;
+                &lt;span class="wrapped-vs-detail-label wrapped-vs-detail-label--weekend"&gt;Weekends&lt;/span&gt;
+                &lt;span class="wrapped-vs-detail-info"&gt;Sat - Sun&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="wrapped-badge"&gt;
+            &lt;div class="wrapped-badge-icon"&gt;{$stats.weekendVsWeekday.badgeEmoji}&lt;/div&gt;
+            &lt;div class="wrapped-badge-text"&gt;
+                You're a true &lt;strong&gt;{$stats.weekendVsWeekday.badge}&lt;/strong&gt;!
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Posting Style (ENHANCED with donut chart) --&gt;
+    &lt;div class="wrapped-section wrapped-section--dark"&gt;
+        &lt;div class="wrapped-icon"&gt;💬&lt;/div&gt;
+        &lt;h2 class="wrapped-section-title wrapped-section-title--accent"&gt;Your Style&lt;/h2&gt;
+        &lt;p class="wrapped-section-subtitle"&gt;Are you a conversation starter or a contributor?&lt;/p&gt;
+        
+        &lt;div class="wrapped-style-donut"&gt;
+            &lt;svg viewBox="0 0 100 100" class="wrapped-donut-svg"&gt;
+                &lt;circle cx="50" cy="50" r="40" 
+                        fill="none" 
+                        stroke="#2a3f5f" 
+                        stroke-width="20"&gt;&lt;/circle&gt;
+                &lt;circle cx="50" cy="50" r="40" 
+                        fill="none" 
+                        stroke="#00ff88" 
+                        stroke-width="20"
+                        stroke-dasharray="{$stats.style.threadPercentage}, 100"
+                        transform="rotate(-90 50 50)"&gt;&lt;/circle&gt;
+            &lt;/svg&gt;
+            &lt;div class="wrapped-donut-center"&gt;
+                &lt;div class="wrapped-donut-percentage"&gt;{$stats.style.threadPercentage}%&lt;/div&gt;
+                &lt;div class="wrapped-donut-label"&gt;threads&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="wrapped-style-stats"&gt;
+            &lt;div class="wrapped-style-stat"&gt;
+                &lt;div class="wrapped-style-stat-number"&gt;{$stats.style.threads}&lt;/div&gt;
+                &lt;div class="wrapped-style-stat-label"&gt;Threads Started&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="wrapped-style-stat"&gt;
+                &lt;div class="wrapped-style-stat-number"&gt;{$stats.style.replies}&lt;/div&gt;
+                &lt;div class="wrapped-style-stat-label"&gt;Replies&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="wrapped-badge"&gt;
+            &lt;div class="wrapped-badge-icon"&gt;💡&lt;/div&gt;
+            &lt;div class="wrapped-badge-text"&gt;
+                You're a &lt;strong&gt;{$stats.style.style}&lt;/strong&gt;! You keep discussions going.
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Thread Starter Stats (NEW) --&gt;
+    &lt;xf:if is="$stats.threadStarter.threadsStarted &gt; 0"&gt;
+        &lt;div class="wrapped-section wrapped-section--dark"&gt;
+            &lt;div class="wrapped-icon"&gt;🚀&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title wrapped-section-title--accent"&gt;Thread Starter&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;Your thread-starting skills&lt;/p&gt;
+            
+            &lt;div class="wrapped-stats-row"&gt;
+                &lt;div class="wrapped-stat-box"&gt;
+                    &lt;div class="wrapped-stat-box-number"&gt;{$stats.threadStarter.threadsWithReplies}&lt;/div&gt;
+                    &lt;div class="wrapped-stat-box-label"&gt;Threads with Replies&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="wrapped-stat-box"&gt;
+                    &lt;div class="wrapped-stat-box-number"&gt;{$stats.threadStarter.successRate}%&lt;/div&gt;
+                    &lt;div class="wrapped-stat-box-label"&gt;Success Rate&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;xf:if is="$stats.threadStarter.avgTimeToFirstReplyFormatted"&gt;
+                &lt;div class="wrapped-highlight wrapped-highlight--center"&gt;
+                    &lt;div class="wrapped-highlight-label"&gt;Average time to first reply&lt;/div&gt;
+                    &lt;div class="wrapped-highlight-value"&gt;{$stats.threadStarter.avgTimeToFirstReplyFormatted}&lt;/div&gt;
+                    &lt;div class="wrapped-highlight-subtext"&gt;Your topics spark thoughtful discussion&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/xf:if&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Weekday Activity Chart --&gt;
+    &lt;div class="wrapped-section"&gt;
+        &lt;h2 class="wrapped-section-title"&gt;{{phrase('wrapped_when_you_post')}}&lt;/h2&gt;
+        &lt;p class="wrapped-section-subtitle"&gt;{{phrase('wrapped_weekday_activity')}}&lt;/p&gt;
+        &lt;div class="wrapped-chart"&gt;
+            &lt;div class="wrapped-chart-bars wrapped-chart-bars--days"&gt;
+                &lt;xf:foreach loop="$stats.weekday.chartData" value="$item"&gt;
+                    &lt;div class="wrapped-chart-bar-container"&gt;
+                        &lt;div class="wrapped-chart-bar &lt;xf:if is="$item.isPeak"&gt;wrapped-chart-bar--peak&lt;/xf:if&gt;" 
+                             style="height: {$item.height}%;" 
+                             data-value="{$item.count}"&gt;&lt;/div&gt;
+                        &lt;div class="wrapped-chart-label"&gt;{$item.day}&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Top Forums --&gt;
+    &lt;xf:if is="$stats.forums"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;h2 class="wrapped-section-title"&gt;{{phrase('wrapped_top_forums')}}&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;{{phrase('wrapped_where_you_posted_most')}}&lt;/p&gt;
+            &lt;div class="wrapped-list"&gt;
+                &lt;xf:foreach loop="$stats.forums" value="$forum"&gt;
+                    &lt;div class="wrapped-list-item"&gt;
+                        &lt;div class="wrapped-list-rank"&gt;#{$forum.rank}&lt;/div&gt;
+                        &lt;div class="wrapped-list-content"&gt;
+                            &lt;div class="wrapped-list-title"&gt;{$forum.title}&lt;/div&gt;
+                            &lt;div class="wrapped-list-stat"&gt;{$forum.post_count} posts&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Top Threads --&gt;
+    &lt;xf:if is="$stats.threads"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;h2 class="wrapped-section-title"&gt;{{phrase('wrapped_top_threads')}}&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;{{phrase('wrapped_threads_you_contributed_most')}}&lt;/p&gt;
+            &lt;div class="wrapped-list"&gt;
+                &lt;xf:foreach loop="$stats.threads" value="$thread"&gt;
+                    &lt;div class="wrapped-list-item"&gt;
+                        &lt;div class="wrapped-list-rank"&gt;#{$thread.rank}&lt;/div&gt;
+                        &lt;div class="wrapped-list-content"&gt;
+                            &lt;a href="{{ link('threads', $thread) }}" class="wrapped-list-title"&gt;{$thread.title}&lt;/a&gt;
+                            &lt;div class="wrapped-list-stat"&gt;{$thread.post_count} posts&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Reactions &amp; Vibe (ENHANCED) --&gt;
+    &lt;div class="wrapped-section wrapped-section--dark"&gt;
+        &lt;div class="wrapped-icon"&gt;❤️&lt;/div&gt;
+        &lt;h2 class="wrapped-section-title wrapped-section-title--accent"&gt;Reactions &amp; Vibe&lt;/h2&gt;
+        
+        &lt;div class="wrapped-reactions-summary"&gt;
+            &lt;div class="wrapped-reactions-stat"&gt;
+                &lt;div class="wrapped-reactions-number"&gt;{$stats.totals.reactionsReceived|number}&lt;/div&gt;
+                &lt;div class="wrapped-reactions-label"&gt;Received&lt;/div&gt;
+                &lt;xf:if is="$stats.yearOverYear.prevReactions &gt; 0"&gt;
+                    &lt;div class="wrapped-reactions-change"&gt;
+                        &lt;xf:if is="$reactionChange &gt; 0"&gt;
+                            &lt;span class="wrapped-stat-up"&gt;+{$reactionChange|number}&lt;/span&gt;
+                        &lt;xf:elseif is="$reactionChange &lt; 0" /&gt;
+                            &lt;span class="wrapped-stat-down"&gt;{$reactionChange|number}&lt;/span&gt;
+                        &lt;/xf:if&gt;
+                    &lt;/div&gt;
+                &lt;/xf:if&gt;
+            &lt;/div&gt;
+            &lt;div class="wrapped-reactions-stat"&gt;
+                &lt;div class="wrapped-reactions-number"&gt;{$stats.totals.reactionsGiven|number}&lt;/div&gt;
+                &lt;div class="wrapped-reactions-label"&gt;Given&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;xf:if is="$stats.reactions.dominantVibe"&gt;
+            &lt;div class="wrapped-vibe-highlight"&gt;
+                &lt;div class="wrapped-vibe-label"&gt;Your dominant vibe&lt;/div&gt;
+                &lt;div class="wrapped-vibe-value"&gt;{$stats.reactions.dominantVibe}&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/xf:if&gt;
+        
+        &lt;!-- Reaction breakdown removed for v1.2.0 - can be added in future version --&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Biggest Fans --&gt;
+    &lt;xf:if is="$stats.interactions.biggestFans"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;h2 class="wrapped-section-title" style="font-size: 28px; color: #00ff88; margin-top: 20px;"&gt;
+                ⭐ Your Biggest Fans
+            &lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;Members who reacted to your posts the most&lt;/p&gt;
+            &lt;div class="wrapped-list"&gt;
+                &lt;xf:foreach loop="$stats.interactions.biggestFans" value="$fan"&gt;
+                    &lt;div class="wrapped-list-item wrapped-list-item--avatar"&gt;
+                        &lt;xf:avatar user="{$fan.user}" size="s" /&gt;
+                        &lt;div class="wrapped-list-content"&gt;
+                            &lt;a href="{{ link('members', $fan.user) }}" class="wrapped-list-title"&gt;{$fan.user.username}&lt;/a&gt;
+                            &lt;div class="wrapped-list-stat"&gt;{$fan.reaction_count} reactions&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Who You Reacted To Most --&gt;
+    &lt;xf:if is="$stats.interactions.youReactedTo"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;h2 class="wrapped-section-title" style="font-size: 28px; color: #00ff88; margin-top: 20px;"&gt;
+                👍 Who You Appreciated
+            &lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;Members you gave the most reactions to&lt;/p&gt;
+            &lt;div class="wrapped-list"&gt;
+                &lt;xf:foreach loop="$stats.interactions.youReactedTo" value="$reactor"&gt;
+                    &lt;div class="wrapped-list-item wrapped-list-item--avatar"&gt;
+                        &lt;xf:avatar user="{$reactor.user}" size="s" /&gt;
+                        &lt;div class="wrapped-list-content"&gt;
+                            &lt;a href="{{ link('members', $reactor.user) }}" class="wrapped-list-title"&gt;{$reactor.user.username}&lt;/a&gt;
+                            &lt;div class="wrapped-list-stat"&gt;{$reactor.reaction_count} reactions&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Top Post (NEW) --&gt;
+    &lt;xf:if is="$stats.topPost"&gt;
+        &lt;div class="wrapped-section wrapped-section--dark"&gt;
+            &lt;div class="wrapped-icon"&gt;🏆&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title wrapped-section-title--accent"&gt;Your Top Post&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;Your most reacted-to post of the year&lt;/p&gt;
+            
+            &lt;div class="wrapped-top-post"&gt;
+                &lt;div class="wrapped-top-post-reactions"&gt;
+                    &lt;div class="wrapped-top-post-reactions-number"&gt;{$stats.topPost.reaction_count}&lt;/div&gt;
+                    &lt;div class="wrapped-top-post-reactions-label"&gt;reactions&lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;div class="wrapped-top-post-content"&gt;
+                    &lt;div class="wrapped-top-post-snippet"&gt;"{$stats.topPost.snippet}"&lt;/div&gt;
+                    &lt;div class="wrapped-top-post-thread"&gt;
+                        In thread: &lt;a href="{{ link('threads', {'thread_id': $stats.topPost.thread_id}) }}"&gt;{$stats.topPost.thread_title}&lt;/a&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;a href="{{ link('posts', {'post_id': $stats.topPost.post_id}) }}" class="button button--link wrapped-top-post-button"&gt;
+                    {{phrase('wrapped_view_post')}}
+                &lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Teammates --&gt;
+    &lt;xf:if is="$stats.interactions.teammates"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;h2 class="wrapped-section-title"&gt;{{phrase('wrapped_teammates')}}&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;{{phrase('wrapped_members_you_posted_with_most')}}&lt;/p&gt;
+            &lt;div class="wrapped-list"&gt;
+                &lt;xf:foreach loop="$stats.interactions.teammates" value="$teammate"&gt;
+                    &lt;div class="wrapped-list-item wrapped-list-item--avatar"&gt;
+                        &lt;div class="wrapped-list-rank"&gt;#{$teammate.rank}&lt;/div&gt;
+                        &lt;xf:avatar user="{$teammate.user}" size="s" /&gt;
+                        &lt;div class="wrapped-list-content"&gt;
+                            &lt;a href="{{ link('members', $teammate.user) }}" class="wrapped-list-title"&gt;{$teammate.user.username}&lt;/a&gt;
+                            &lt;div class="wrapped-list-stat"&gt;{$teammate.shared_threads} shared threads&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Bookends --&gt;
+    &lt;xf:if is="$stats.bookends.first &amp;&amp; $stats.bookends.last"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;h2 class="wrapped-section-title"&gt;{{phrase('wrapped_bookends')}}&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;{{phrase('wrapped_first_and_last_posts')}}&lt;/p&gt;
+            
+            &lt;div class="wrapped-bookends"&gt;
+                &lt;div class="wrapped-bookend"&gt;
+                    &lt;div class="wrapped-bookend-label"&gt;{{phrase('wrapped_first_post')}}&lt;/div&gt;
+                    &lt;div class="wrapped-bookend-thread"&gt;
+                        &lt;a href="{{ link('threads', {'thread_id': $stats.bookends.first.thread_id}) }}"&gt;{$stats.bookends.first.thread_title}&lt;/a&gt;
+                    &lt;/div&gt;
+                    &lt;div class="wrapped-bookend-date"&gt;
+                        &lt;xf:date time="{$stats.bookends.first.post_date}" /&gt;
+                    &lt;/div&gt;
+                    &lt;a href="{{ link('posts', {'post_id': $stats.bookends.first.post_id}) }}" class="button button--link"&gt;{{phrase('wrapped_view_post')}}&lt;/a&gt;
+                &lt;/div&gt;
+                
+                &lt;xf:if is="$stats.bookends.first.post_id != $stats.bookends.last.post_id"&gt;
+                    &lt;div class="wrapped-bookend"&gt;
+                        &lt;div class="wrapped-bookend-label"&gt;{{phrase('wrapped_last_post')}}&lt;/div&gt;
+                        &lt;div class="wrapped-bookend-thread"&gt;
+                            &lt;a href="{{ link('threads', {'thread_id': $stats.bookends.last.thread_id}) }}"&gt;{$stats.bookends.last.thread_title}&lt;/a&gt;
+                        &lt;/div&gt;
+                        &lt;div class="wrapped-bookend-date"&gt;
+                            &lt;xf:date time="{$stats.bookends.last.post_date}" /&gt;
+                        &lt;/div&gt;
+                        &lt;a href="{{ link('posts', {'post_id': $stats.bookends.last.post_id}) }}" class="button button--link"&gt;{{phrase('wrapped_view_post')}}&lt;/a&gt;
+                    &lt;/div&gt;
+                &lt;/xf:if&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Navigation to Forum Wrapped --&gt;
+    &lt;div class="wrapped-section wrapped-section--dark"&gt;
+        &lt;div class="wrapped-nav-callout"&gt;
+            &lt;div class="wrapped-nav-icon"&gt;🌐&lt;/div&gt;
+            &lt;div class="wrapped-nav-text"&gt;
+                &lt;div class="wrapped-nav-title"&gt;Want to see the FORUM's stats?&lt;/div&gt;
+                &lt;div class="wrapped-nav-subtitle"&gt;Discover the community's {$year} highlights, top contributors, and trends&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;a href="{{ link('forum-wrapped', null, {'year': $year}) }}" class="button button--cta button--icon button--icon--download"&gt;
+                &lt;span class="button-text"&gt;View Forum's {$year} Wrapped&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Year Navigator --&gt;
+    &lt;div class="wrapped-footer"&gt;
+        &lt;xf:if is="$year &gt; 2020"&gt;
+            &lt;a href="{{ link('wrapped', null, {'year': $prevYear}) }}" class="button"&gt;View {$prevYear} Wrapped&lt;/a&gt;
+        &lt;/xf:if&gt;
+        &lt;xf:if is="$year &lt; $currentYear"&gt;
+            &lt;a href="{{ link('wrapped', null, {'year': $currentYear}) }}" class="button"&gt;View {$currentYear} Wrapped&lt;/a&gt;
+        &lt;/xf:if&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</template>
+
+  <template type="public" title="wrapped.less" version_id="1020000" version_string="1.2.0">// ########################## WRAPPED ADDON - v1.2.0 ##########################
+// Spotify/NZ Warriors-inspired year-in-review styling
+
+.wrapped-container
+{
+    max-width: 800px;
+    margin: 0 auto;
+    padding: @xf-paddingLarge;
+    background: linear-gradient(135deg, #0a1929 0%, #1a2332 100%);
+    border-radius: @xf-borderRadiusLarge;
+    
+    // Hero Section
+    .wrapped-hero
+    {
+        text-align: center;
+        padding: @xf-paddingLarge * 2;
+        margin-bottom: @xf-paddingLarge;
+        background: rgba(0, 255, 136, 0.05);
+        border-radius: @xf-borderRadiusMedium;
+        border: 1px solid rgba(0, 255, 136, 0.1);
+        
+        .wrapped-hero-avatar
+        {
+            margin-bottom: @xf-paddingMedium;
+            border: 3px solid #00ff88;
+            border-radius: 50%;
+        }
+        
+        .wrapped-hero-title
+        {
+            font-size: 32px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #ffffff;
+            margin: 0 0 @xf-paddingSmall;
+        }
+        
+        .wrapped-hero-subtitle
+        {
+            font-size: @xf-fontSizeLarge;
+            color: #8b9dc3;
+            margin: 0;
+        }
+    }
+    
+    // Section Containers
+    .wrapped-section
+    {
+        background: #1a2332;
+        border-radius: @xf-borderRadiusMedium;
+        padding: @xf-paddingLarge;
+        margin-bottom: @xf-paddingLarge;
+        border: 1px solid #2a3f5f;
+        
+        &amp;--dark
+        {
+            background: linear-gradient(135deg, #0f1b2a 0%, #1a2332 100%);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        
+        &amp;--highlight
+        {
+            background: linear-gradient(135deg, #00ff8820 0%, #00ff8810 100%);
+            border: 2px solid #00ff88;
+            text-align: center;
+        }
+    }
+    
+    // Section Titles
+    .wrapped-section-title
+    {
+        font-size: 24px;
+        font-weight: @xf-fontWeightHeavy;
+        color: #ffffff;
+        margin: 0 0 @xf-paddingSmall;
+        text-align: center;
+        
+        &amp;--accent
+        {
+            color: #00ff88;
+        }
+    }
+    
+    .wrapped-section-subtitle
+    {
+        font-size: @xf-fontSizeNormal;
+        color: #8b9dc3;
+        text-align: center;
+        margin: 0 0 @xf-paddingLarge;
+    }
+    
+    // Icons
+    .wrapped-icon
+    {
+        text-align: center;
+        font-size: 48px;
+        margin-bottom: @xf-paddingMedium;
+    }
+    
+    // Stat Hero (Big Number)
+    .wrapped-stat-hero
+    {
+        text-align: center;
+        
+        .wrapped-stat-number
+        {
+            font-size: 72px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #00ff88;
+            line-height: 1;
+        }
+        
+        .wrapped-stat-label
+        {
+            font-size: @xf-fontSizeLarge;
+            color: #8b9dc3;
+            margin-top: @xf-paddingSmall;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .wrapped-stat-change
+        {
+            margin-top: @xf-paddingMedium;
+            font-size: @xf-fontSizeLarge;
+            color: #8b9dc3;
+            
+            .wrapped-stat-up
+            {
+                color: #00ff88;
+                font-weight: @xf-fontWeightHeavy;
+            }
+            
+            .wrapped-stat-down
+            {
+                color: #ff4444;
+                font-weight: @xf-fontWeightHeavy;
+            }
+        }
+    }
+    
+    // Stats Grid
+    .wrapped-stats-grid
+    {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: @xf-paddingMedium;
+        margin-bottom: @xf-paddingMedium;
+    }
+    
+    .wrapped-stat-card
+    {
+        background: #0f1b2a;
+        border-radius: @xf-borderRadiusMedium;
+        padding: @xf-paddingMedium;
+        text-align: center;
+        border: 1px solid #2a3f5f;
+        
+        .wrapped-stat-value
+        {
+            font-size: 36px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #ffffff;
+        }
+        
+        .wrapped-stat-name
+        {
+            font-size: @xf-fontSizeSmall;
+            color: #8b9dc3;
+            margin-top: @xf-paddingSmall;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    }
+    
+    // Highlight Boxes
+    .wrapped-highlight
+    {
+        background: rgba(0, 255, 136, 0.1);
+        border-left: 4px solid #00ff88;
+        padding: @xf-paddingMedium;
+        margin-top: @xf-paddingMedium;
+        color: #ffffff;
+        font-size: @xf-fontSizeLarge;
+        border-radius: @xf-borderRadiusSmall;
+        
+        &amp;--center
+        {
+            text-align: center;
+            border-left: none;
+            border: 2px solid #00ff88;
+        }
+        
+        .wrapped-highlight-label
+        {
+            font-size: @xf-fontSizeSmall;
+            color: #8b9dc3;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: @xf-paddingSmall;
+        }
+        
+        .wrapped-highlight-value
+        {
+            font-size: 48px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #00ff88;
+            line-height: 1;
+        }
+        
+        .wrapped-highlight-subtext
+        {
+            font-size: @xf-fontSizeNormal;
+            color: #8b9dc3;
+            margin-top: @xf-paddingSmall;
+        }
+        
+        strong
+        {
+            color: #00ff88;
+        }
+    }
+    
+    // Peak Month
+    .wrapped-peak-month
+    {
+        text-align: center;
+        
+        .wrapped-peak-month-name
+        {
+            font-size: 48px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #00ff88;
+        }
+        
+        .wrapped-peak-month-count
+        {
+            font-size: @xf-fontSizeLarge;
+            color: #8b9dc3;
+            margin-top: @xf-paddingSmall;
+        }
+    }
+    
+    // Charts
+    .wrapped-chart
+    {
+        margin: @xf-paddingLarge 0;
+        
+        &amp;--hourly
+        {
+            background: rgba(0, 0, 0, 0.3);
+            padding: @xf-paddingLarge;
+            border-radius: @xf-borderRadiusMedium;
+        }
+    }
+    
+    .wrapped-chart-bars
+    {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        height: 200px;
+        gap: 4px;
+        
+        &amp;--days
+        {
+            gap: 8px;
+        }
+        
+        &amp;--hours
+        {
+            gap: 2px;
+        }
+    }
+    
+    .wrapped-chart-bar-container
+    {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        height: 100%;
+        
+        &amp;--hour
+        {
+            min-width: 3px;
+        }
+    }
+    
+    .wrapped-chart-bar
+    {
+        width: 100%;
+        background: linear-gradient(to top, #2a5f4f, #3a7f6f);
+        border-radius: 4px 4px 0 0;
+        transition: all 0.3s ease;
+        position: relative;
+        min-height: 3px;
+        
+        &amp;:hover
+        {
+            background: linear-gradient(to top, #00ff88, #00cc70);
+            
+            &amp;::after
+            {
+                content: attr(data-value);
+                position: absolute;
+                top: -30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #0a1929;
+                color: #ffffff;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                white-space: nowrap;
+                border: 1px solid #00ff88;
+            }
+        }
+        
+        &amp;--peak
+        {
+            background: linear-gradient(to top, #00ff88, #00cc70);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+        
+        &amp;--hourly
+        {
+            border-radius: 2px 2px 0 0;
+        }
+    }
+    
+    .wrapped-chart-label
+    {
+        margin-top: @xf-paddingSmall;
+        font-size: 12px;
+        color: #8b9dc3;
+        text-align: center;
+    }
+    
+    .wrapped-chart-hours-labels
+    {
+        display: flex;
+        justify-content: space-between;
+        margin-top: @xf-paddingMedium;
+        font-size: 12px;
+        color: #8b9dc3;
+    }
+    
+    // Weekend vs Weekday Comparison
+    .wrapped-vs-comparison
+    {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: @xf-paddingLarge;
+        margin: @xf-paddingLarge 0;
+    }
+    
+    .wrapped-vs-circle
+    {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        
+        &amp;--weekday
+        {
+            background: linear-gradient(135deg, #4a7bb8, #5a8bc8);
+            border: 3px solid #6a9bd8;
+        }
+        
+        &amp;--weekend
+        {
+            background: linear-gradient(135deg, #f59e0b, #f7b547);
+            border: 3px solid #fbbf24;
+        }
+        
+        .wrapped-vs-number
+        {
+            font-size: 36px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #ffffff;
+        }
+        
+        .wrapped-vs-label
+        {
+            font-size: @xf-fontSizeSmall;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: @xf-paddingSmall;
+        }
+    }
+    
+    .wrapped-vs-vs
+    {
+        font-size: 24px;
+        font-weight: @xf-fontWeightHeavy;
+        color: #8b9dc3;
+    }
+    
+    .wrapped-vs-details
+    {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: @xf-paddingMedium;
+        margin: @xf-paddingLarge 0;
+    }
+    
+    .wrapped-vs-detail
+    {
+        text-align: center;
+        
+        .wrapped-vs-detail-label
+        {
+            font-size: @xf-fontSizeLarge;
+            font-weight: @xf-fontWeightHeavy;
+            margin-bottom: @xf-paddingSmall;
+            
+            &amp;--weekday
+            {
+                color: #6a9bd8;
+            }
+            
+            &amp;--weekend
+            {
+                color: #fbbf24;
+            }
+        }
+        
+        .wrapped-vs-detail-info
+        {
+            font-size: @xf-fontSizeSmall;
+            color: #8b9dc3;
+        }
+    }
+    
+    // Badge
+    .wrapped-badge
+    {
+        background: rgba(0, 255, 136, 0.1);
+        border: 2px solid #00ff88;
+        border-radius: @xf-borderRadiusMedium;
+        padding: @xf-paddingMedium @xf-paddingLarge;
+        margin-top: @xf-paddingLarge;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: @xf-paddingMedium;
+        
+        .wrapped-badge-icon
+        {
+            font-size: 32px;
+        }
+        
+        .wrapped-badge-text
+        {
+            font-size: @xf-fontSizeLarge;
+            color: #ffffff;
+            
+            strong
+            {
+                color: #00ff88;
+            }
+        }
+    }
+    
+    // Donut Chart
+    .wrapped-style-donut
+    {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: @xf-paddingLarge auto;
+    }
+    
+    .wrapped-donut-svg
+    {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .wrapped-donut-center
+    {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        
+        .wrapped-donut-percentage
+        {
+            font-size: 48px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #00ff88;
+        }
+        
+        .wrapped-donut-label
+        {
+            font-size: @xf-fontSizeSmall;
+            color: #8b9dc3;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    }
+    
+    // Style Stats Row
+    .wrapped-style-stats
+    {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: @xf-paddingMedium;
+        margin: @xf-paddingLarge 0;
+    }
+    
+    .wrapped-style-stat
+    {
+        background: #0f1b2a;
+        border-radius: @xf-borderRadiusMedium;
+        padding: @xf-paddingMedium;
+        text-align: center;
+        border: 1px solid #2a3f5f;
+        
+        .wrapped-style-stat-number
+        {
+            font-size: 36px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #ffffff;
+        }
+        
+        .wrapped-style-stat-label
+        {
+            font-size: @xf-fontSizeSmall;
+            color: #00ff88;
+            margin-top: @xf-paddingSmall;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    }
+    
+    // Stats Row (for Thread Starter)
+    .wrapped-stats-row
+    {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: @xf-paddingMedium;
+        margin: @xf-paddingLarge 0;
+    }
+    
+    .wrapped-stat-box
+    {
+        background: #0f1b2a;
+        border-radius: @xf-borderRadiusMedium;
+        padding: @xf-paddingLarge;
+        text-align: center;
+        border: 1px solid #2a3f5f;
+        
+        .wrapped-stat-box-number
+        {
+            font-size: 48px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #ffffff;
+        }
+        
+        .wrapped-stat-box-label
+        {
+            font-size: @xf-fontSizeSmall;
+            color: #00ff88;
+            margin-top: @xf-paddingSmall;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    }
+    
+    // Reactions Section
+    .wrapped-reactions-summary
+    {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: @xf-paddingMedium;
+        margin: @xf-paddingLarge 0;
+    }
+    
+    .wrapped-reactions-stat
+    {
+        background: #0f1b2a;
+        border-radius: @xf-borderRadiusMedium;
+        padding: @xf-paddingLarge;
+        text-align: center;
+        border: 1px solid #2a3f5f;
+        
+        .wrapped-reactions-number
+        {
+            font-size: 48px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #ffffff;
+        }
+        
+        .wrapped-reactions-label
+        {
+            font-size: @xf-fontSizeSmall;
+            color: #00ff88;
+            margin-top: @xf-paddingSmall;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .wrapped-reactions-change
+        {
+            font-size: @xf-fontSizeSmall;
+            color: #8b9dc3;
+            margin-top: @xf-paddingSmall;
+        }
+    }
+    
+    .wrapped-vibe-highlight
+    {
+        text-align: center;
+        margin: @xf-paddingLarge 0;
+        padding: @xf-paddingLarge;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: @xf-borderRadiusMedium;
+        
+        .wrapped-vibe-label
+        {
+            font-size: @xf-fontSizeSmall;
+            color: #8b9dc3;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: @xf-paddingSmall;
+        }
+        
+        .wrapped-vibe-value
+        {
+            font-size: 36px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #ffffff;
+        }
+    }
+    
+    .wrapped-reactions-breakdown
+    {
+        margin-top: @xf-paddingLarge;
+        
+        .wrapped-reactions-breakdown-title
+        {
+            font-size: @xf-fontSizeSmall;
+            color: #8b9dc3;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: @xf-paddingMedium;
+            text-align: center;
+        }
+    }
+    
+    .wrapped-reaction-item
+    {
+        display: flex;
+        align-items: center;
+        gap: @xf-paddingMedium;
+        padding: @xf-paddingMedium;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: @xf-borderRadiusSmall;
+        margin-bottom: @xf-paddingSmall;
+        
+        .wrapped-reaction-icon
+        {
+            width: 24px;
+            height: 24px;
+            
+            img
+            {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        
+        .wrapped-reaction-name
+        {
+            flex: 1;
+            color: #ffffff;
+        }
+        
+        .wrapped-reaction-count
+        {
+            background: #00ff88;
+            color: #0a1929;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: @xf-fontWeightHeavy;
+        }
+    }
+    
+    // Top Post
+    .wrapped-top-post
+    {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: @xf-borderRadiusMedium;
+        padding: @xf-paddingLarge;
+        margin: @xf-paddingLarge 0;
+        border: 1px solid #2a3f5f;
+        
+        .wrapped-top-post-reactions
+        {
+            text-align: center;
+            margin-bottom: @xf-paddingMedium;
+            
+            .wrapped-top-post-reactions-number
+            {
+                font-size: 48px;
+                font-weight: @xf-fontWeightHeavy;
+                color: #00ff88;
+            }
+            
+            .wrapped-top-post-reactions-label
+            {
+                font-size: @xf-fontSizeSmall;
+                color: #8b9dc3;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+        }
+        
+        .wrapped-top-post-content
+        {
+            margin: @xf-paddingLarge 0;
+        }
+        
+        .wrapped-top-post-snippet
+        {
+            font-size: @xf-fontSizeLarge;
+            color: #ffffff;
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: @xf-paddingMedium;
+        }
+        
+        .wrapped-top-post-thread
+        {
+            font-size: @xf-fontSizeSmall;
+            color: #8b9dc3;
+            
+            a
+            {
+                color: #00ff88;
+                text-decoration: none;
+                
+                &amp;:hover
+                {
+                    text-decoration: underline;
+                }
+            }
+        }
+        
+        .wrapped-top-post-button
+        {
+            width: 100%;
+            margin-top: @xf-paddingMedium;
+        }
+    }
+    
+    // Lists
+    .wrapped-list
+    {
+        margin-top: @xf-paddingMedium;
+    }
+    
+    .wrapped-list-item
+    {
+        display: flex;
+        align-items: center;
+        gap: @xf-paddingMedium;
+        padding: @xf-paddingMedium;
+        background: #0f1b2a;
+        border-radius: @xf-borderRadiusMedium;
+        margin-bottom: @xf-paddingSmall;
+        border: 1px solid #2a3f5f;
+        transition: all 0.2s ease;
+        
+        &amp;:hover
+        {
+            border-color: #00ff88;
+            background: #1a2332;
+        }
+        
+        &amp;--avatar
+        {
+            .avatar
+            {
+                margin-left: @xf-paddingSmall;
+            }
+        }
+        
+        .wrapped-list-rank
+        {
+            font-size: @xf-fontSizeLarge;
+            font-weight: @xf-fontWeightHeavy;
+            color: #00ff88;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .wrapped-list-content
+        {
+            flex: 1;
+        }
+        
+        .wrapped-list-title
+        {
+            color: #ffffff;
+            font-weight: @xf-fontWeightHeavy;
+            text-decoration: none;
+            display: block;
+            margin-bottom: @xf-paddingSmall;
+            
+            &amp;:hover
+            {
+                color: #00ff88;
+            }
+        }
+        
+        .wrapped-list-stat
+        {
+            color: #8b9dc3;
+            font-size: @xf-fontSizeSmall;
+        }
+    }
+    
+    // List Items (for interactions, teammates, etc)
+    .wrapped-list
+    {
+        margin-top: @xf-paddingMedium;
+    }
+    
+    .wrapped-list-item
+    {
+        display: flex;
+        align-items: center;
+        gap: @xf-paddingMedium;
+        padding: @xf-paddingMedium;
+        background: #0f1b2a;
+        border-radius: @xf-borderRadiusMedium;
+        margin-bottom: @xf-paddingSmall;
+        border: 1px solid #2a3f5f;
+        transition: all 0.2s ease;
+        
+        &amp;:hover
+        {
+            border-color: #00ff88;
+            background: #1a2332;
+        }
+        
+        &amp;--avatar
+        {
+            .avatar
+            {
+                flex-shrink: 0;
+            }
+        }
+    }
+    
+    .wrapped-list-content
+    {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .wrapped-list-title
+    {
+        color: #ffffff;
+        font-weight: @xf-fontWeightHeavy;
+        display: block;
+        margin-bottom: 4px;
+        text-decoration: none;
+        
+        &amp;:hover
+        {
+            color: #00ff88;
+        }
+    }
+    
+    .wrapped-list-stat
+    {
+        color: #8b9dc3;
+        font-size: @xf-fontSizeSmall;
+    }
+    
+    .wrapped-list-rank
+    {
+        color: #00ff88;
+        font-weight: @xf-fontWeightHeavy;
+        font-size: @xf-fontSizeLarge;
+        margin-left: auto;
+    }
+    
+    // Bookends
+    .wrapped-bookends
+    {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: @xf-paddingMedium;
+        margin-top: @xf-paddingMedium;
+    }
+    
+    .wrapped-bookend
+    {
+        background: #0f1b2a;
+        border-radius: @xf-borderRadiusMedium;
+        padding: @xf-paddingLarge;
+        text-align: center;
+        border: 1px solid #2a3f5f;
+        
+        .wrapped-bookend-label
+        {
+            font-size: @xf-fontSizeLarge;
+            font-weight: @xf-fontWeightHeavy;
+            color: #00ff88;
+            margin-bottom: @xf-paddingMedium;
+        }
+        
+        .wrapped-bookend-thread
+        {
+            margin-bottom: @xf-paddingSmall;
+            
+            a
+            {
+                color: #ffffff;
+                font-weight: @xf-fontWeightHeavy;
+                text-decoration: none;
+                display: block;
+                margin-bottom: @xf-paddingSmall;
+                
+                &amp;:hover
+                {
+                    color: #00ff88;
+                }
+            }
+        }
+        
+        .wrapped-bookend-date
+        {
+            color: #8b9dc3;
+            margin-bottom: @xf-paddingMedium;
+            font-size: @xf-fontSizeSmall;
+        }
+        
+        .button
+        {
+            width: 100%;
+        }
+    }
+    
+    // Footer
+    .wrapped-footer
+    {
+        display: flex;
+        gap: @xf-paddingMedium;
+        justify-content: center;
+        margin-top: @xf-paddingLarge;
+        
+        .button
+        {
+            min-width: 150px;
+        }
+    }
+    
+    // Subtext
+    .wrapped-subtext
+    {
+        text-align: center;
+        color: #8b9dc3;
+        font-size: @xf-fontSizeNormal;
+        margin-top: @xf-paddingSmall;
+    }
+}
+
+// Mobile Responsive
+@media (max-width: 650px)
+{
+    .wrapped-container
+    {
+        padding: @xf-paddingMedium;
+        
+        .wrapped-hero-title
+        {
+            font-size: 24px;
+        }
+        
+        .wrapped-stat-hero .wrapped-stat-number
+        {
+            font-size: 48px;
+        }
+        
+        .wrapped-vs-circle
+        {
+            width: 120px;
+            height: 120px;
+            
+            .wrapped-vs-number
+            {
+                font-size: 28px;
+            }
+        }
+        
+        .wrapped-stats-grid,
+        .wrapped-reactions-summary,
+        .wrapped-vs-details,
+        .wrapped-stats-row,
+        .wrapped-style-stats
+        {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+// Navigation Callout (between Forum and Personal Wrapped)
+.wrapped-nav-callout
+{
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 32px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 255, 136, 0.05));
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-radius: 16px;
+    
+    .wrapped-nav-icon
+    {
+        font-size: 48px;
+        flex-shrink: 0;
+    }
+    
+    .wrapped-nav-text
+    {
+        flex: 1;
+        
+        .wrapped-nav-title
+        {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 8px;
+        }
+        
+        .wrapped-nav-subtitle
+        {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+    }
+    
+    .button
+    {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+    
+    @media (max-width: 768px)
+    {
+        flex-direction: column;
+        text-align: center;
+        
+        .wrapped-nav-icon
+        {
+            font-size: 64px;
+        }
+        
+        .button
+        {
+            width: 100%;
+        }
+    }
+}
+
+// Growth stats
+.wrapped-growth-grid
+{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+    
+    @media (max-width: 768px)
+    {
+        grid-template-columns: 1fr;
+    }
+}
+
+.wrapped-growth-item
+{
+    background: rgba(255, 255, 255, 0.05);
+    padding: 24px;
+    border-radius: 12px;
+    text-align: center;
+    
+    .wrapped-growth-label
+    {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .wrapped-growth-value
+    {
+        font-size: 32px;
+        font-weight: 700;
+        
+        &amp;.wrapped-stat-up
+        {
+            color: #00ff88;
+        }
+        
+        &amp;.wrapped-stat-down
+        {
+            color: #ff4444;
+        }
+    }
+}
+
+// Highlights grid
+.wrapped-highlights-grid
+{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+    
+    @media (max-width: 768px)
+    {
+        grid-template-columns: 1fr;
+    }
+}
+
+.wrapped-highlight-item
+{
+    background: rgba(255, 255, 255, 0.05);
+    padding: 24px;
+    border-radius: 12px;
+    text-align: center;
+    
+    .wrapped-highlight-label
+    {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .wrapped-highlight-value
+    {
+        font-size: 20px;
+        font-weight: 700;
+        color: #00ff88;
+        margin-bottom: 8px;
+    }
+    
+    .wrapped-highlight-detail
+    {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+}
+
+
+// FIXED: Highlights Grid Links
+.wrapped-highlight-detail
+{
+    a
+    {
+        color: #00ff88;
+        text-decoration: none;
+        
+        &amp;:hover
+        {
+            text-decoration: underline;
+        }
+    }
+}
+
+// FIXED: Thread Links in Top Threads
+.wrapped-list-title
+{
+    color: @xf-linkColor;
+    
+    &amp;:hover
+    {
+        color: #00ff88;
+    }
+}
+
+
+// Most Engaged Thread
+.wrapped-engaged-thread
+{
+    text-align: center;
+    
+    .wrapped-engaged-title
+    {
+        display: block;
+        font-size: @xf-fontSizeLargest;
+        font-weight: @xf-fontWeightHeavy;
+        color: #00ff88;
+        text-decoration: none;
+        margin-bottom: @xf-paddingLarge;
+        
+        &amp;:hover
+        {
+            text-decoration: underline;
+        }
+    }
+    
+    .wrapped-engaged-stats
+    {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: @xf-paddingMedium;
+        margin: @xf-paddingLarge 0;
+        
+        @media (max-width: 768px)
+        {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    .wrapped-engaged-stat
+    {
+        background: rgba(255, 255, 255, 0.05);
+        padding: @xf-paddingLarge;
+        border-radius: @xf-borderRadiusMedium;
+        
+        .wrapped-engaged-number
+        {
+            font-size: 32px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #00ff88;
+            margin-bottom: @xf-paddingSmall;
+        }
+        
+        .wrapped-engaged-label
+        {
+            font-size: @xf-fontSizeSmall;
+            color: rgba(255, 255, 255, 0.7);
+        }
+    }
+}
+
+// Time of Day Breakdown
+.wrapped-time-breakdown
+{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: @xf-paddingMedium;
+    margin: @xf-paddingLarge 0;
+    
+    @media (max-width: 768px)
+    {
+        grid-template-columns: 1fr;
+    }
+    
+    .wrapped-time-block
+    {
+        background: rgba(255, 255, 255, 0.05);
+        padding: @xf-paddingLarge;
+        border-radius: @xf-borderRadiusMedium;
+        text-align: center;
+        
+        .wrapped-time-icon
+        {
+            font-size: 48px;
+            margin-bottom: @xf-paddingMedium;
+        }
+        
+        .wrapped-time-label
+        {
+            font-size: @xf-fontSizeLarge;
+            font-weight: @xf-fontWeightHeavy;
+            color: #fff;
+            margin-bottom: @xf-paddingSmall;
+        }
+        
+        .wrapped-time-info
+        {
+            font-size: @xf-fontSizeSmall;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: @xf-paddingMedium;
+        }
+        
+        .wrapped-time-bar
+        {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: @xf-paddingMedium 0;
+            
+            .wrapped-time-fill
+            {
+                height: 100%;
+                transition: width 0.3s ease;
+            }
+        }
+        
+        .wrapped-time-percent
+        {
+            font-size: 28px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #00ff88;
+            margin: @xf-paddingSmall 0;
+        }
+        
+        .wrapped-time-count
+        {
+            font-size: @xf-fontSizeSmall;
+            color: rgba(255, 255, 255, 0.7);
+        }
+    }
+}
+
+// Most Active Streak
+.wrapped-streak-container
+{
+    text-align: center;
+    
+    .wrapped-streak-user
+    {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: @xf-paddingMedium;
+        margin-bottom: @xf-paddingLarge;
+        
+        .wrapped-streak-username
+        {
+            font-size: @xf-fontSizeLargest;
+            font-weight: @xf-fontWeightHeavy;
+            color: #00ff88;
+            text-decoration: none;
+            
+            &amp;:hover
+            {
+                text-decoration: underline;
+            }
+        }
+    }
+    
+    .wrapped-streak-stat
+    {
+        margin: @xf-paddingLarge 0;
+        
+        .wrapped-streak-number
+        {
+            font-size: 72px;
+            font-weight: @xf-fontWeightHeavy;
+            color: #00ff88;
+            line-height: 1;
+            margin-bottom: @xf-paddingSmall;
+        }
+        
+        .wrapped-streak-label
+        {
+            font-size: @xf-fontSizeLarge;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    }
+    
+    .wrapped-streak-dates
+    {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: @xf-paddingLarge;
+        margin: @xf-paddingLarge 0;
+        
+        @media (max-width: 768px)
+        {
+            flex-direction: column;
+            gap: @xf-paddingMedium;
+        }
+        
+        .wrapped-streak-date
+        {
+            background: rgba(255, 255, 255, 0.05);
+            padding: @xf-paddingMedium @xf-paddingLarge;
+            border-radius: @xf-borderRadiusMedium;
+            
+            .wrapped-streak-date-label
+            {
+                display: block;
+                font-size: @xf-fontSizeSmall;
+                color: rgba(255, 255, 255, 0.6);
+                margin-bottom: @xf-paddingSmall;
+            }
+        }
+        
+        .wrapped-streak-arrow
+        {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.3);
+            
+            @media (max-width: 768px)
+            {
+                transform: rotate(90deg);
+            }
+        }
+    }
+}
+</template>
+<template title="forum_wrapped_view" type="public" version_id="1020000" version_string="1.2.0">&lt;xf:title&gt;Forum's {$year} Wrapped&lt;/xf:title&gt;
+&lt;xf:css src="wrapped.less" /&gt;
+
+&lt;div class="wrapped-container"&gt;
+    
+    &lt;!-- Hero Section --&gt;
+    &lt;div class="wrapped-hero"&gt;
+        &lt;div class="wrapped-hero-icon"&gt;🌐&lt;/div&gt;
+        &lt;h1 class="wrapped-hero-title"&gt;Your Forum's&lt;br/&gt;{$year} Wrapped&lt;/h1&gt;
+        &lt;p class="wrapped-hero-subtitle"&gt;A year of community, connection, and conversation&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Overview Stats --&gt;
+    &lt;div class="wrapped-section wrapped-section--dark"&gt;
+        &lt;div class="wrapped-icon"&gt;📊&lt;/div&gt;
+        &lt;h2 class="wrapped-section-title wrapped-section-title--accent"&gt;By The Numbers&lt;/h2&gt;
+        &lt;p class="wrapped-section-subtitle"&gt;Your community's impact in {$year}&lt;/p&gt;
+        
+        &lt;div class="wrapped-stats-grid wrapped-stats-grid--3col"&gt;
+            &lt;div class="wrapped-stat-card"&gt;
+                &lt;div class="wrapped-stat-number"&gt;{$stats.overview.totalPosts|number}&lt;/div&gt;
+                &lt;div class="wrapped-stat-label"&gt;Posts Created&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="wrapped-stat-card"&gt;
+                &lt;div class="wrapped-stat-number"&gt;{$stats.overview.totalThreads|number}&lt;/div&gt;
+                &lt;div class="wrapped-stat-label"&gt;Threads Started&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="wrapped-stat-card"&gt;
+                &lt;div class="wrapped-stat-number"&gt;{$stats.overview.newMembers|number}&lt;/div&gt;
+                &lt;div class="wrapped-stat-label"&gt;New Members&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="wrapped-stats-grid wrapped-stats-grid--2col" style="margin-top: 20px;"&gt;
+            &lt;div class="wrapped-stat-card"&gt;
+                &lt;div class="wrapped-stat-number"&gt;{$stats.overview.totalReactions|number}&lt;/div&gt;
+                &lt;div class="wrapped-stat-label"&gt;Reactions Given&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="wrapped-stat-card"&gt;
+                &lt;div class="wrapped-stat-number"&gt;{$stats.overview.activeMembers|number}&lt;/div&gt;
+                &lt;div class="wrapped-stat-label"&gt;Active Members&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Growth Stats --&gt;
+    &lt;xf:if is="$stats.growth.prevPosts &gt; 0"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;div class="wrapped-icon"&gt;📈&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title"&gt;Year Over Year Growth&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;Comparing {$year} to {$prevYear}&lt;/p&gt;
+            
+            &lt;div class="wrapped-growth-grid"&gt;
+                &lt;div class="wrapped-growth-item"&gt;
+                    &lt;div class="wrapped-growth-label"&gt;Posts&lt;/div&gt;
+                    &lt;div class="wrapped-growth-value &lt;xf:if is="$stats.growth.postGrowth &gt; 0"&gt;wrapped-stat-up&lt;xf:elseif is="$stats.growth.postGrowth &lt; 0" /&gt;wrapped-stat-down&lt;/xf:if&gt;"&gt;
+                        &lt;xf:if is="$stats.growth.postGrowth &gt; 0"&gt;+&lt;/xf:if&gt;{$stats.growth.postGrowth}%
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="wrapped-growth-item"&gt;
+                    &lt;div class="wrapped-growth-label"&gt;Threads&lt;/div&gt;
+                    &lt;div class="wrapped-growth-value &lt;xf:if is="$stats.growth.threadGrowth &gt; 0"&gt;wrapped-stat-up&lt;xf:elseif is="$stats.growth.threadGrowth &lt; 0" /&gt;wrapped-stat-down&lt;/xf:if&gt;"&gt;
+                        &lt;xf:if is="$stats.growth.threadGrowth &gt; 0"&gt;+&lt;/xf:if&gt;{$stats.growth.threadGrowth}%
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="wrapped-growth-item"&gt;
+                    &lt;div class="wrapped-growth-label"&gt;New Members&lt;/div&gt;
+                    &lt;div class="wrapped-growth-value &lt;xf:if is="$stats.growth.memberGrowth &gt; 0"&gt;wrapped-stat-up&lt;xf:elseif is="$stats.growth.memberGrowth &lt; 0" /&gt;wrapped-stat-down&lt;/xf:if&gt;"&gt;
+                        &lt;xf:if is="$stats.growth.memberGrowth &gt; 0"&gt;+&lt;/xf:if&gt;{$stats.growth.memberGrowth}%
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Most Active Month --&gt;
+    &lt;div class="wrapped-section wrapped-section--dark"&gt;
+        &lt;div class="wrapped-icon"&gt;📅&lt;/div&gt;
+        &lt;h2 class="wrapped-section-title wrapped-section-title--accent"&gt;Most Active Month&lt;/h2&gt;
+        &lt;div class="wrapped-peak-month"&gt;
+            &lt;div class="wrapped-peak-month-name"&gt;{$stats.monthlyActivity.peakMonth}&lt;/div&gt;
+            &lt;div class="wrapped-peak-month-count"&gt;{$stats.monthlyActivity.peakCount|number} posts&lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="wrapped-chart wrapped-chart--monthly"&gt;
+            &lt;div class="wrapped-chart-bars"&gt;
+                &lt;xf:foreach loop="$stats.monthlyActivity.chartData" value="$month"&gt;
+                    &lt;div class="wrapped-chart-bar-container"&gt;
+                        &lt;div class="wrapped-chart-bar &lt;xf:if is="$month.isPeak"&gt;wrapped-chart-bar--peak&lt;/xf:if&gt;" 
+                             style="height: {$month.height}%;"
+                             title="{$month.monthName}: {$month.count} posts"
+                             data-xf-init="tooltip"&gt;&lt;/div&gt;
+                        &lt;div class="wrapped-chart-label"&gt;{$month.monthShort}&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Peak Hours --&gt;
+    &lt;div class="wrapped-section"&gt;
+        &lt;div class="wrapped-icon"&gt;⏰&lt;/div&gt;
+        &lt;h2 class="wrapped-section-title"&gt;Peak Activity Hours&lt;/h2&gt;
+        &lt;p class="wrapped-section-subtitle"&gt;{$stats.hourlyActivity.peakTimeRange}&lt;/p&gt;
+        
+        &lt;div class="wrapped-peak-callout"&gt;
+            &lt;div class="wrapped-peak-time"&gt;{$stats.hourlyActivity.peakHour}&lt;/div&gt;
+            &lt;div class="wrapped-peak-label"&gt;Most Active Hour&lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="wrapped-chart wrapped-chart--hourly"&gt;
+            &lt;div class="wrapped-chart-bars wrapped-chart-bars--hours"&gt;
+                &lt;xf:foreach loop="$stats.hourlyActivity.chartData" value="$item"&gt;
+                    &lt;div class="wrapped-chart-bar-container wrapped-chart-bar-container--hour"&gt;
+                        &lt;div class="wrapped-chart-bar wrapped-chart-bar--hourly &lt;xf:if is="$item.isPeak"&gt;wrapped-chart-bar--peak&lt;/xf:if&gt;" 
+                             style="height: {$item.height}%;"
+                             title="{$item.displayHour}: {$item.count} posts"
+                             data-xf-init="tooltip"&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+            &lt;div class="wrapped-chart-hours-labels"&gt;
+                &lt;span&gt;12am&lt;/span&gt;
+                &lt;span&gt;6am&lt;/span&gt;
+                &lt;span&gt;12pm&lt;/span&gt;
+                &lt;span&gt;6pm&lt;/span&gt;
+                &lt;span&gt;11pm&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Weekend vs Weekday --&gt;
+    &lt;div class="wrapped-section wrapped-section--dark"&gt;
+        &lt;div class="wrapped-icon"&gt;📊&lt;/div&gt;
+        &lt;h2 class="wrapped-section-title wrapped-section-title--accent"&gt;Weekend vs Weekday&lt;/h2&gt;
+        &lt;p class="wrapped-section-subtitle"&gt;When does your community engage?&lt;/p&gt;
+        
+        &lt;div class="wrapped-vs-comparison"&gt;
+            &lt;div class="wrapped-vs-circle wrapped-vs-circle--weekday"&gt;
+                &lt;div class="wrapped-vs-number"&gt;{$stats.weekendVsWeekday.weekdayCount|number}&lt;/div&gt;
+                &lt;div class="wrapped-vs-label"&gt;posts&lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="wrapped-vs-vs"&gt;VS&lt;/div&gt;
+            
+            &lt;div class="wrapped-vs-circle wrapped-vs-circle--weekend"&gt;
+                &lt;div class="wrapped-vs-number"&gt;{$stats.weekendVsWeekday.weekendCount|number}&lt;/div&gt;
+                &lt;div class="wrapped-vs-label"&gt;posts&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="wrapped-vs-details"&gt;
+            &lt;div class="wrapped-vs-detail"&gt;
+                &lt;span class="wrapped-vs-detail-label wrapped-vs-detail-label--weekday"&gt;Weekdays&lt;/span&gt;
+                &lt;span class="wrapped-vs-detail-info"&gt;Mon - Fri&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="wrapped-vs-detail"&gt;
+                &lt;span class="wrapped-vs-detail-label wrapped-vs-detail-label--weekend"&gt;Weekends&lt;/span&gt;
+                &lt;span class="wrapped-vs-detail-info"&gt;Sat - Sun&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="wrapped-badge"&gt;
+            &lt;div class="wrapped-badge-icon"&gt;🏆&lt;/div&gt;
+            &lt;div class="wrapped-badge-text"&gt;
+                Your community are &lt;strong&gt;{$stats.weekendVsWeekday.badge}&lt;/strong&gt;!
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Most Engaged Thread --&gt;
+    &lt;xf:if is="$stats.mostEngagedThread"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;div class="wrapped-icon"&gt;🤝&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title"&gt;Most Engaged Thread&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;The conversation that united everyone&lt;/p&gt;
+            
+            &lt;div class="wrapped-engaged-thread"&gt;
+                &lt;a href="{{ link('threads', {'thread_id': $stats.mostEngagedThread.thread_id}) }}" class="wrapped-engaged-title"&gt;
+                    {$stats.mostEngagedThread.title}
+                &lt;/a&gt;
+                
+                &lt;div class="wrapped-engaged-stats"&gt;
+                    &lt;div class="wrapped-engaged-stat"&gt;
+                        &lt;div class="wrapped-engaged-number"&gt;{$stats.mostEngagedThread.unique_participants|number}&lt;/div&gt;
+                        &lt;div class="wrapped-engaged-label"&gt;👥 Unique Participants&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="wrapped-engaged-stat"&gt;
+                        &lt;div class="wrapped-engaged-number"&gt;{$stats.mostEngagedThread.reply_count|number}&lt;/div&gt;
+                        &lt;div class="wrapped-engaged-label"&gt;💬 Replies&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="wrapped-engaged-stat"&gt;
+                        &lt;div class="wrapped-engaged-number"&gt;{$stats.mostEngagedThread.view_count|number}&lt;/div&gt;
+                        &lt;div class="wrapped-engaged-label"&gt;👁️ Views&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="wrapped-engaged-stat"&gt;
+                        &lt;div class="wrapped-engaged-number"&gt;{$stats.mostEngagedThread.reaction_count|number}&lt;/div&gt;
+                        &lt;div class="wrapped-engaged-label"&gt;❤️ Reactions&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;div class="wrapped-badge" style="margin-top: 24px;"&gt;
+                    &lt;div class="wrapped-badge-icon"&gt;🎊&lt;/div&gt;
+                    &lt;div class="wrapped-badge-text"&gt;A true community conversation!&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Time of Day Breakdown --&gt;
+    &lt;xf:if is="$stats.timeOfDay"&gt;
+        &lt;div class="wrapped-section wrapped-section--dark"&gt;
+            &lt;div class="wrapped-icon"&gt;🌅&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title wrapped-section-title--accent"&gt;Early Birds vs Night Owls&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;When does your community come alive?&lt;/p&gt;
+            
+            &lt;div class="wrapped-time-breakdown"&gt;
+                &lt;div class="wrapped-time-block"&gt;
+                    &lt;div class="wrapped-time-icon"&gt;🌅&lt;/div&gt;
+                    &lt;div class="wrapped-time-label"&gt;Morning&lt;/div&gt;
+                    &lt;div class="wrapped-time-info"&gt;5am - 12pm&lt;/div&gt;
+                    &lt;div class="wrapped-time-bar"&gt;
+                        &lt;div class="wrapped-time-fill" style="width: {$stats.timeOfDay.morningPercent}%; background: linear-gradient(135deg, #fbbf24, #f59e0b);"&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="wrapped-time-percent"&gt;{$stats.timeOfDay.morningPercent}%&lt;/div&gt;
+                    &lt;div class="wrapped-time-count"&gt;{$stats.timeOfDay.morning|number} posts&lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;div class="wrapped-time-block"&gt;
+                    &lt;div class="wrapped-time-icon"&gt;☀️&lt;/div&gt;
+                    &lt;div class="wrapped-time-label"&gt;Afternoon&lt;/div&gt;
+                    &lt;div class="wrapped-time-info"&gt;12pm - 6pm&lt;/div&gt;
+                    &lt;div class="wrapped-time-bar"&gt;
+                        &lt;div class="wrapped-time-fill" style="width: {$stats.timeOfDay.afternoonPercent}%; background: linear-gradient(135deg, #f97316, #ea580c);"&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="wrapped-time-percent"&gt;{$stats.timeOfDay.afternoonPercent}%&lt;/div&gt;
+                    &lt;div class="wrapped-time-count"&gt;{$stats.timeOfDay.afternoon|number} posts&lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;div class="wrapped-time-block"&gt;
+                    &lt;div class="wrapped-time-icon"&gt;🌆&lt;/div&gt;
+                    &lt;div class="wrapped-time-label"&gt;Evening&lt;/div&gt;
+                    &lt;div class="wrapped-time-info"&gt;6pm - 12am&lt;/div&gt;
+                    &lt;div class="wrapped-time-bar"&gt;
+                        &lt;div class="wrapped-time-fill" style="width: {$stats.timeOfDay.eveningPercent}%; background: linear-gradient(135deg, #8b5cf6, #7c3aed);"&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="wrapped-time-percent"&gt;{$stats.timeOfDay.eveningPercent}%&lt;/div&gt;
+                    &lt;div class="wrapped-time-count"&gt;{$stats.timeOfDay.evening|number} posts&lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;div class="wrapped-time-block"&gt;
+                    &lt;div class="wrapped-time-icon"&gt;🦉&lt;/div&gt;
+                    &lt;div class="wrapped-time-label"&gt;Night&lt;/div&gt;
+                    &lt;div class="wrapped-time-info"&gt;12am - 5am&lt;/div&gt;
+                    &lt;div class="wrapped-time-bar"&gt;
+                        &lt;div class="wrapped-time-fill" style="width: {$stats.timeOfDay.nightPercent}%; background: linear-gradient(135deg, #3b82f6, #2563eb);"&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="wrapped-time-percent"&gt;{$stats.timeOfDay.nightPercent}%&lt;/div&gt;
+                    &lt;div class="wrapped-time-count"&gt;{$stats.timeOfDay.night|number} posts&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="wrapped-badge" style="margin-top: 24px;"&gt;
+                &lt;div class="wrapped-badge-icon"&gt;{$stats.timeOfDay.badgeEmoji}&lt;/div&gt;
+                &lt;div class="wrapped-badge-text"&gt;Your community are &lt;strong&gt;{$stats.timeOfDay.badge}&lt;/strong&gt;!&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Most Active Streak --&gt;
+    &lt;xf:if is="$stats.mostActiveStreak"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;div class="wrapped-icon"&gt;📅&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title"&gt;Most Active Streak&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;Celebrating consistency and dedication&lt;/p&gt;
+            
+            &lt;div class="wrapped-streak-container"&gt;
+                &lt;div class="wrapped-streak-user"&gt;
+                    &lt;xf:avatar user="{$stats.mostActiveStreak.user}" size="l" /&gt;
+                    &lt;a href="{{ link('members', $stats.mostActiveStreak.user) }}" class="wrapped-streak-username"&gt;
+                        {$stats.mostActiveStreak.user.username}
+                    &lt;/a&gt;
+                &lt;/div&gt;
+                
+                &lt;div class="wrapped-streak-stat"&gt;
+                    &lt;div class="wrapped-streak-number"&gt;{$stats.mostActiveStreak.streak_days}&lt;/div&gt;
+                    &lt;div class="wrapped-streak-label"&gt;Consecutive Days&lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;div class="wrapped-streak-dates"&gt;
+                    &lt;div class="wrapped-streak-date"&gt;
+                        &lt;span class="wrapped-streak-date-label"&gt;Started:&lt;/span&gt;
+                        &lt;xf:date time="{$stats.mostActiveStreak.start_date}" /&gt;
+                    &lt;/div&gt;
+                    &lt;div class="wrapped-streak-arrow"&gt;→&lt;/div&gt;
+                    &lt;div class="wrapped-streak-date"&gt;
+                        &lt;span class="wrapped-streak-date-label"&gt;Ended:&lt;/span&gt;
+                        &lt;xf:date time="{$stats.mostActiveStreak.end_date}" /&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;div class="wrapped-badge" style="margin-top: 24px;"&gt;
+                    &lt;div class="wrapped-badge-icon"&gt;🏆&lt;/div&gt;
+                    &lt;div class="wrapped-badge-text"&gt;Ultimate dedication!&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Top Posters --&gt;
+    &lt;xf:if is="$stats.topPosters"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;div class="wrapped-icon"&gt;🏆&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title"&gt;Top 10 Posters&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;Community champions who kept conversations flowing&lt;/p&gt;
+            
+            &lt;div class="wrapped-list"&gt;
+                &lt;xf:foreach loop="$stats.topPosters" value="$poster"&gt;
+                    &lt;div class="wrapped-list-item wrapped-list-item--avatar"&gt;
+                        &lt;div class="wrapped-list-rank"&gt;#{$poster.rank}&lt;/div&gt;
+                        &lt;xf:avatar user="{$poster.user}" size="s" /&gt;
+                        &lt;div class="wrapped-list-content"&gt;
+                            &lt;a href="{{ link('members', $poster.user) }}" class="wrapped-list-title"&gt;{$poster.username}&lt;/a&gt;
+                            &lt;div class="wrapped-list-stat"&gt;{$poster.post_count|number} posts&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Top Thread Starters --&gt;
+    &lt;xf:if is="$stats.topThreadStarters"&gt;
+        &lt;div class="wrapped-section wrapped-section--dark"&gt;
+            &lt;div class="wrapped-icon"&gt;💬&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title"&gt;Top 10 Thread Starters&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;Members who sparked the best discussions&lt;/p&gt;
+            
+            &lt;div class="wrapped-list"&gt;
+                &lt;xf:foreach loop="$stats.topThreadStarters" value="$starter"&gt;
+                    &lt;div class="wrapped-list-item wrapped-list-item--avatar"&gt;
+                        &lt;div class="wrapped-list-rank"&gt;#{$starter.rank}&lt;/div&gt;
+                        &lt;xf:avatar user="{$starter.user}" size="s" /&gt;
+                        &lt;div class="wrapped-list-content"&gt;
+                            &lt;a href="{{ link('members', $starter.user) }}" class="wrapped-list-title"&gt;{$starter.username}&lt;/a&gt;
+                            &lt;div class="wrapped-list-stat"&gt;{$starter.thread_count|number} threads&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Top Reacted Members --&gt;
+    &lt;xf:if is="$stats.topReactedMembers"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;div class="wrapped-icon"&gt;❤️&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title"&gt;Most Appreciated Members&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;Members whose posts received the most reactions&lt;/p&gt;
+            
+            &lt;div class="wrapped-list"&gt;
+                &lt;xf:foreach loop="$stats.topReactedMembers" value="$member"&gt;
+                    &lt;div class="wrapped-list-item wrapped-list-item--avatar"&gt;
+                        &lt;div class="wrapped-list-rank"&gt;#{$member.rank}&lt;/div&gt;
+                        &lt;xf:avatar user="{$member.user}" size="s" /&gt;
+                        &lt;div class="wrapped-list-content"&gt;
+                            &lt;a href="{{ link('members', $member.user) }}" class="wrapped-list-title"&gt;{$member.username}&lt;/a&gt;
+                            &lt;div class="wrapped-list-stat"&gt;{$member.reaction_count|number} reactions&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Rising Stars --&gt;
+    &lt;xf:if is="$stats.risingStars"&gt;
+        &lt;div class="wrapped-section wrapped-section--dark"&gt;
+            &lt;div class="wrapped-icon"&gt;⭐&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title"&gt;Rising Stars&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;New members who made an immediate impact&lt;/p&gt;
+            
+            &lt;div class="wrapped-list"&gt;
+                &lt;xf:foreach loop="$stats.risingStars" value="$star"&gt;
+                    &lt;div class="wrapped-list-item wrapped-list-item--avatar"&gt;
+                        &lt;xf:avatar user="{$star.user}" size="s" /&gt;
+                        &lt;div class="wrapped-list-content"&gt;
+                            &lt;a href="{{ link('members', $star.user) }}" class="wrapped-list-title"&gt;{$star.username}&lt;/a&gt;
+                            &lt;div class="wrapped-list-stat"&gt;{$star.post_count|number} posts (joined in {$year}!)&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Top Threads --&gt;
+    &lt;xf:if is="$stats.topThreads"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;div class="wrapped-icon"&gt;🔥&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title"&gt;Top 10 Threads&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;The conversations that captivated your community&lt;/p&gt;
+            
+            &lt;div class="wrapped-list"&gt;
+                &lt;xf:foreach loop="$stats.topThreads" value="$thread"&gt;
+                    &lt;div class="wrapped-list-item"&gt;
+                        &lt;div class="wrapped-list-rank"&gt;#{$thread.rank}&lt;/div&gt;
+                        &lt;div class="wrapped-list-content"&gt;
+                            &lt;a href="{{ link('threads', $thread.thread) }}" class="wrapped-list-title"&gt;{$thread.title}&lt;/a&gt;
+                            &lt;div class="wrapped-list-stat"&gt;{$thread.reply_count|number} replies • {$thread.view_count|number} views&lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Most Active Forums --&gt;
+    &lt;xf:if is="$stats.forumActivity"&gt;
+        &lt;div class="wrapped-section wrapped-section--dark"&gt;
+            &lt;div class="wrapped-icon"&gt;📍&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title"&gt;Most Active Forums&lt;/h2&gt;
+            &lt;p class="wrapped-section-subtitle"&gt;Where your community spent their time&lt;/p&gt;
+            
+            &lt;div class="wrapped-list"&gt;
+                &lt;xf:foreach loop="$stats.forumActivity" value="$forum" key="$index"&gt;
+                    &lt;xf:if is="$index &lt; 5"&gt;
+                        &lt;div class="wrapped-list-item"&gt;
+                            &lt;div class="wrapped-list-content"&gt;
+                                &lt;div class="wrapped-list-title"&gt;{$forum.title}&lt;/div&gt;
+                                &lt;div class="wrapped-list-stat"&gt;{$forum.post_count|number} posts&lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/xf:if&gt;
+                &lt;/xf:foreach&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Highlights --&gt;
+    &lt;xf:if is="$stats.highlights.busiestDay"&gt;
+        &lt;div class="wrapped-section"&gt;
+            &lt;div class="wrapped-icon"&gt;🎊&lt;/div&gt;
+            &lt;h2 class="wrapped-section-title"&gt;Year Highlights&lt;/h2&gt;
+            
+            &lt;div class="wrapped-highlights-grid"&gt;
+                &lt;xf:if is="$stats.highlights.firstPost"&gt;
+                    &lt;div class="wrapped-highlight-item"&gt;
+                        &lt;div class="wrapped-highlight-label"&gt;First Post of {$year}&lt;/div&gt;
+                        &lt;div class="wrapped-highlight-value"&gt;
+                            &lt;xf:date time="{$stats.highlights.firstPost.post_date}" /&gt;
+                        &lt;/div&gt;
+                        &lt;div class="wrapped-highlight-detail"&gt;
+                            by &lt;a href="{{ link('members', {'user_id': $stats.highlights.firstPost.user_id}) }}"&gt;{$stats.highlights.firstPost.username}&lt;/a&gt; in "&lt;a href="{{ link('threads', {'thread_id': $stats.highlights.firstPost.thread_id}) }}"&gt;{$stats.highlights.firstPost.thread_title}&lt;/a&gt;"
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:if&gt;
+                
+                &lt;xf:if is="$stats.highlights.busiestDay"&gt;
+                    &lt;div class="wrapped-highlight-item"&gt;
+                        &lt;div class="wrapped-highlight-label"&gt;Busiest Day&lt;/div&gt;
+                        &lt;div class="wrapped-highlight-value"&gt;{$stats.highlights.busiestDay.date}&lt;/div&gt;
+                        &lt;div class="wrapped-highlight-detail"&gt;{$stats.highlights.busiestDay.post_count|number} posts!&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:if&gt;
+                
+                &lt;xf:if is="$stats.highlights.lastPost"&gt;
+                    &lt;div class="wrapped-highlight-item"&gt;
+                        &lt;div class="wrapped-highlight-label"&gt;Last Post of {$year}&lt;/div&gt;
+                        &lt;div class="wrapped-highlight-value"&gt;
+                            &lt;xf:date time="{$stats.highlights.lastPost.post_date}" /&gt;
+                        &lt;/div&gt;
+                        &lt;div class="wrapped-highlight-detail"&gt;
+                            by &lt;a href="{{ link('members', {'user_id': $stats.highlights.lastPost.user_id}) }}"&gt;{$stats.highlights.lastPost.username}&lt;/a&gt; in "&lt;a href="{{ link('threads', {'thread_id': $stats.highlights.lastPost.thread_id}) }}"&gt;{$stats.highlights.lastPost.thread_title}&lt;/a&gt;"
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/xf:if&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/xf:if&gt;
+
+    &lt;!-- Navigation to Personal Wrapped --&gt;
+    &lt;div class="wrapped-section wrapped-section--dark"&gt;
+        &lt;div class="wrapped-nav-callout"&gt;
+            &lt;div class="wrapped-nav-icon"&gt;👤&lt;/div&gt;
+            &lt;div class="wrapped-nav-text"&gt;
+                &lt;div class="wrapped-nav-title"&gt;Want to see YOUR personal stats?&lt;/div&gt;
+                &lt;div class="wrapped-nav-subtitle"&gt;Discover your {$year} activity, top posts, and achievements&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;a href="{{ link('wrapped', null, {'year': $year}) }}" class="button button--cta button--icon button--icon--download"&gt;
+                &lt;span class="button-text"&gt;View Your {$year} Wrapped&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Year Navigator --&gt;
+    &lt;div class="wrapped-footer"&gt;
+        &lt;xf:if is="$year &gt; 2020"&gt;
+            &lt;a href="{{ link('forum-wrapped', null, {'year': $prevYear}) }}" class="button"&gt;View {$prevYear} Wrapped&lt;/a&gt;
+        &lt;/xf:if&gt;
+        &lt;xf:if is="$year &lt; $currentYear"&gt;
+            &lt;a href="{{ link('forum-wrapped', null, {'year': $currentYear}) }}" class="button"&gt;View {$currentYear} Wrapped&lt;/a&gt;
+        &lt;/xf:if&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</template></templates>
